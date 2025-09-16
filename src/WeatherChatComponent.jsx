@@ -1,4 +1,6 @@
 import React, { useState, useRef, useEffect } from 'react';
+import { v4 as uuidv4 } from "uuid"; // npm install uuid
+
 import {
   Cloud,
   Sun,
@@ -26,6 +28,8 @@ const WeatherChatComponent = () => {
   const [currentInput, setCurrentInput] = useState('');
   const [selectedModel, setSelectedModel] = useState('gpt-5-nano');
   const [isStreaming, setIsStreaming] = useState(false);
+  const [sessionId] = useState(() => uuidv4());
+
   const messagesEndRef = useRef(null);
 
   const scrollToBottom = () => {
@@ -412,7 +416,7 @@ const WeatherChatComponent = () => {
       const response = await fetch('http://localhost:5000/api/chat/stream', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ message: userMessage.text, model: selectedModel })
+        body: JSON.stringify({ message: userMessage.text, model: selectedModel, session_id:sessionId })
       });
 
       if (!response.ok) {
