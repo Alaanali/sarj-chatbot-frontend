@@ -76,6 +76,8 @@ const WeatherChatComponent = () => {
     });
   };
 
+  const API_BASE = import.meta.env.VITE_API_BASE_URL;
+
   // Single day forecast card
   const ForecastDayCard = ({ dayData, isFirst }) => (
     <div className={`${isFirst ? 'bg-blue-100 border-blue-300' : 'bg-white border-gray-200'} border rounded-lg p-4`}>
@@ -413,7 +415,7 @@ const WeatherChatComponent = () => {
     setMessages(prev => [...prev, assistantMessage]);
 
     try {
-      const response = await fetch('http://localhost:5000/api/chat/stream', {
+      const response = await fetch(`${API_BASE}chat/stream`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ message: userMessage.text, model: selectedModel, session_id:sessionId })

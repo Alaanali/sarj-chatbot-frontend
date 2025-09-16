@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { Line, Bar, Doughnut } from 'react-chartjs-2';
+import apiClient from './api';
 import {
   Chart as ChartJS,
   CategoryScale,
@@ -43,9 +44,8 @@ const EvaluationDashboard = () => {
 
   const loadDashboardData = async () => {
     try {
-      const response = await fetch(`${API_BASE}/dashboard/stats`);
-      const data = await response.json();
-      setStats(data);
+      const response = await apiClient.get(`/dashboard/stats`);
+      setStats(response.data);
       setLoading(false);
     } catch (error) {
       console.error('Error loading dashboard data:', error);
@@ -55,9 +55,8 @@ const EvaluationDashboard = () => {
 
   const loadConversations = async () => {
     try {
-      const response = await fetch(`${API_BASE}/dashboard/conversations`);
-      const data = await response.json();
-      setConversations(data);
+      const response = await apiClient.get(`/dashboard/conversations`);
+      setConversations(response.data);
     } catch (error) {
       console.error('Error loading conversations:', error);
     }
@@ -65,9 +64,8 @@ const EvaluationDashboard = () => {
 
   const loadEvaluations = async () => {
     try {
-      const response = await fetch(`${API_BASE}/dashboard/evaluations`);
-      const data = await response.json();
-      setEvaluations(data);
+      const response =await apiClient.get(`/dashboard/evaluations`);
+      setEvaluations(response.data);
     } catch (error) {
       console.error('Error loading evaluations:', error);
     }
@@ -76,7 +74,7 @@ const EvaluationDashboard = () => {
   const runEvaluation = async () => {
     setIsEvaluating(true);
     try {
-      await fetch(`${API_BASE}/evaluation/run`, { method: 'POST' });
+      await apiClient.post(`/evaluation/run`);
       setTimeout(() => {
         loadDashboardData();
         setIsEvaluating(false);
